@@ -2,11 +2,12 @@ import { useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { useEffect } from 'react'
-import { BufferAttribute } from 'three'
+import { BufferAttribute, SphereGeometry } from 'three'
 
-function DisintegrationMesh() {
+
+function MyBufferGeometry() {
+  const geom = new SphereGeometry(1, 32).toNonIndexed();
   const geometryRef = useRef(null)
-  const shaderRef = useRef(null)
 
   useEffect(() => {
     const count = geometryRef.current.attributes.position.count
@@ -18,8 +19,14 @@ function DisintegrationMesh() {
       randoms[i + 2] = r
     }
     geometryRef.current.setAttribute('aRandom', new BufferAttribute(randoms, 1))
-  }, [])
+  }, []);
 
+  return <primitive object={geom} ref={geometryRef}/>
+}
+
+function DisintegrationMesh() {
+
+  const shaderRef = useRef(null)
   const uniforms = {
     uTime: {
       value: 0.0
@@ -93,7 +100,7 @@ function DisintegrationMesh() {
   return (
     <>
       <mesh>
-        <icosahedronGeometry ref={geometryRef} args={[1, 3]} />
+        <MyBufferGeometry/>
         <shaderMaterial
           ref={shaderRef}
           vertexShader={vertexShader}

@@ -1,4 +1,4 @@
-# mesh-disintegration
+# sphere-environment-disintegration
 
 Created with CodeSandbox
 
