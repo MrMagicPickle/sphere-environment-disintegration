@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, useTexture } from '@react-three/drei'
 import { useEffect } from 'react'
-import { BufferAttribute, SphereGeometry, Vector3 } from 'three'
+import { BufferAttribute, IcosahedronGeometry, SphereGeometry, Vector3 } from 'three'
 
 /**
  * TODOs:
@@ -10,7 +10,8 @@ import { BufferAttribute, SphereGeometry, Vector3 } from 'three'
  */
 function MyBufferGeometry() {
   const scale = 1;
-  const geom = new SphereGeometry(1 * scale, 32 * scale, 32 * scale).toNonIndexed();
+  // const geom = new SphereGeometry(1 * scale, 32 * scale, 32 * scale).toNonIndexed();
+  const geom = new IcosahedronGeometry(1, 9).toNonIndexed();
   geom.scale(-1, 1, 1);
   const geometryRef = useRef(null)
 
@@ -20,7 +21,7 @@ function MyBufferGeometry() {
     let randoms = new Float32Array(count)
     const centers = new Float32Array(count * 3);
     for (let i = 0; i < count; i += 3) {
-      const r = Math.random() * scale;
+      const r = Math.random();
       randoms[i] = r
       randoms[i + 1] = r
       randoms[i + 2] = r
@@ -110,6 +111,10 @@ function DisintegrationMesh() {
 
       // Move triangles
       finalPosition += 3.*normal * aRandom * locprog;
+
+      // amplify the expansion of the triangles. You can increase this value to
+      // increase the 'scale' of the geometry.
+      finalPosition += 50.*normal;
 
       // Invert position.
       // As locprog increases, the vertex positions will shrink to 0,
